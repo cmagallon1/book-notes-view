@@ -4,7 +4,9 @@ import SigninForm from './components/signinForm';
 import './components/signinForm.scss'
 import NavigationBar from '../navbar/navbar';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import Cookies from 'js-cookie';
+
 class Signin extends Component {
 
   state = {
@@ -23,14 +25,16 @@ class Signin extends Component {
       user: this.state
     }
     axios.post('https://book-notes-api.herokuapp.com/users/signin', body)
-    .then(res => {
-      let a = useHistory();
-      a.push("/dashboard")
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    .then(res => this.saveTokenHandler(res))
+    .catch(err => console.log(err))
+  }
+
+  saveTokenHandler = (res) => {
+    console.log(res)
+    if(res.data.ok) {
+        Cookies.set('token', res.data.data.token)
+        this.props.history.push("/dashboard")
+      }
   }
 
   render(){
@@ -50,4 +54,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default withRouter(Signin);
