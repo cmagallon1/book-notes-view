@@ -13,7 +13,7 @@ const NavigationBar = () => {
         <Nav className="ml-auto">
           <Nav.Link><Link to='/signup'>Signup</Link></Nav.Link>
           <Nav.Link><Link to='/signin'>Signin</Link></Nav.Link>
-          { getCurrentUser && <Nav.Link><Link to='/signout'>signout</Link></Nav.Link> }
+          { getCurrentUser() && <Nav.Link><Link to='/signout'>signout</Link></Nav.Link> }
         </Nav>
       </Navbar.Collapse>
     </Navbar>
