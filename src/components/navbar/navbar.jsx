@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { withRouter  } from 'react-router';
+import { getCurrentUser } from '../../axios/index';
 
 const NavigationBar = () => {
   return (
@@ -13,7 +13,7 @@ const NavigationBar = () => {
         <Nav className="ml-auto">
           <Nav.Link><Link to='/signup'>Signup</Link></Nav.Link>
           <Nav.Link><Link to='/signin'>Signin</Link></Nav.Link>
-          { Cookies.get('token') && <Nav.Link><Link to='/signout'>signout</Link></Nav.Link> }
+          { getCurrentUser && <Nav.Link><Link to='/signout'>signout</Link></Nav.Link> }
         </Nav>
       </Navbar.Collapse>
     </Navbar>
