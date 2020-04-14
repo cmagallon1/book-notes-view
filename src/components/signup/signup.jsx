@@ -3,7 +3,8 @@ import SignupForm from './components/signupForm';
 import './components/signupForm.scss';
 import {Container, Row, Col, h1} from 'react-bootstrap'
 import NavigationBar from '../navbar/navbar';
-import axios from 'axios';
+import { withRouter } from 'react-router'
+import { setCurrentUser, postWithoutToken } from '../../axios/index.js'
 
 class Signup extends Component { 
 
@@ -14,7 +15,6 @@ class Signup extends Component {
     password: '',
     email:''
   }
-
  
   valuesHandler = (key, value) => {
     this.setState({ [key]: value })
@@ -22,16 +22,26 @@ class Signup extends Component {
 
   signupHandler = (e) => {
     e.preventDefault()
-    console.log(this.state)
-    let body = {
-      user: this.state
+    postWithoutToken('users', { user: this.state })
+    .then(res => this.getUserCredentials())
+    .catch(error => console.log(error.response))
+  }
+
+  getUserCredentials = () => {
+    const user = {
+      user: {
+        email: this.state.email,
+        password: this.state.password
+      }
     }
-    axios.post('https://book-notes-api.herokuapp.com/users/signup', body)
-    .then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
-    })
+    postWithoutToken('users/signin', user)
+    .then(res => this.saveAndRedirectUser(res))
+    .catch(error => console.log(error))
+  }
+
+  saveAndRedirectUser = res => {
+    setCurrentUser(res.data.data)
+    this.props.history.push('/dashboard')
   }
 
   render(){
@@ -51,4 +61,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default withRouter(Signup);
