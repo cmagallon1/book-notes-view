@@ -2,14 +2,13 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect
+  Route
 } from 'react-router-dom';
-import Signin from '../signin/signin';
-import Signup from '../signup/signup';
-import Menu from '../menu/menu';
-import NoMatch from '../signin/signin';
-import Cookies from 'js-cookie';
+import Signin from '../components/signin/signin';
+import Signup from '../components/signup/signup';
+import Signout from '../components/signout/signout';
+import Menu from '../components/menu/menu';
+import NoMatch from '../components/signin/signin';
 
 const Routes = () => {
   return (
@@ -28,7 +27,7 @@ const Routes = () => {
           <Menu/>
         </Route>
         <Route exact path="/signout">
-          <Signout/>          
+          <Signout/>
         </Route>
         <Route path="*">
           <NoMatch/>
@@ -38,12 +37,7 @@ const Routes = () => {
   )
 }
 
-const Signout = () => {
-  Cookies.remove('token')
-  return ( <Redirect to={{ pathname: "/" }}/>)
-}
-
-export default Routes
+export default Routes;
 
 
 

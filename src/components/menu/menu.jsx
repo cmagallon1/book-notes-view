@@ -1,40 +1,25 @@
 import React, { Component } from 'react';
 import NavigationBar from '../navbar/navbar';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-
+import { getCurrentUser, getPetition} from '../../axios/index';
 class Menu extends Component {
 
-  state = {
-    books: []
-  }
-
-  takeError = (error) => {
-    if(error.response) 
-      return error.response
-    else if(error.request)
-      return error.request
-    else
-      return error.message
-  }
-
-  myHeader = () => {
-    return {
-      headers: {
-        'Authorization': Cookies.get('token'),
-        'Content-Type': 'application/json'
-      }
+  constructor(props) {
+    super(props)
+    this.state = {
+      books: []
     }
+    this.user = JSON.parse(getCurrentUser())
   }
+  
 
   componentDidMount(){
-    axios.get('https://book-notes-api.herokuapp.com/books', this.myHeader)
-    .then(res =>{ console.log(res)})
-    .catch(err => console.log(this.takeError(err)))
+    getPetition(`users/${this.user.uuid}/books`)
+    .then(res => this.setState(state => ({ books: res.data.books }) ))
+    .catch(error => console.log(error.response))
   }
 
   render(){
-    if(Cookies.get('token')) {
+    if(this.user) {
       return(
         <>
           <NavigationBar/>
